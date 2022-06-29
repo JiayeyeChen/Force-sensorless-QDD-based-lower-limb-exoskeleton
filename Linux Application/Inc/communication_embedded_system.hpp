@@ -35,8 +35,6 @@ class USBCommunicationHandle
             /*Tx message*/
             void TransmitCargo(uint8_t *data, uint8_t len);
             void SendText(std::string text);
-            void StartDataLogActive(std::string filename);
-            void StartDataLogPassive(std::string filename);
             /*Datalog control*/
             enum DataLogTask curDatalogTask;
             void DataLogManager(void);
@@ -45,6 +43,9 @@ class USBCommunicationHandle
             uint8_t ifDatalogStarted;
             std::ofstream fileStream;
             std::string curDatalogFilename;
+            void StartDataLogActive(std::string filename);
+            void StartDataLogPassive(std::string filename);
+            bool ifNewMsgIsThisString(std::string str);
             /*Received MCU Values*/
             uint32_t    systemTime, index;
     private:

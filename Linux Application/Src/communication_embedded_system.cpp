@@ -178,6 +178,7 @@ void USBCommunicationHandle::DataLogManager(void)
         }
         else if (curDatalogTask == DATALOG_TASK_RECEIVE_DATA_SLOT_MSG)
         {
+
             fileStream.open(curDatalogFilename.data());
             fileStream << msg.data() << ",";
             dataSlotLabellingCount--;
@@ -210,4 +211,19 @@ void USBCommunicationHandle::DataLogManager(void)
         {
         }
     }
+}
+
+bool USBCommunicationHandle::ifNewMsgIsThisString(std::string str)
+{
+    if(ifNewMessage)
+    {
+        std::string msg((const char*)rxMessageCfrm, rxMessageLen);
+        if (!msg.compare(str.data()))
+        {
+            ifNewMessage = 0;
+            return true;
+        }
+        return false;
+    }
+    return false;
 }
