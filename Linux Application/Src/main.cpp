@@ -49,18 +49,21 @@ int main(int argc, char** argv)
     while(1)
     {
         hUSBCom.DataLogManager();
+
+        if(hUSBCom.ifNewMsgIsThisString("System ID start request"))
+        {
+            hUSBCom.SendText("SystemID start noted");
+            hExoskeleton.curMainTask = EXOSKELETON_MAIN_TASK_SYSTEM_ID;
+            hExoskeleton.curSubTask = EXOSKELETON_SUB_TASK_SYSTEMID_LOG_KNEE_JOINT_DATA;
+            hUSBCom.StartDataLogPassive("SysID Knee.csv");
+            std::cout<<"System ID started! Logging Knee Joint Movement Data"<<std::endl;
+        }
+
         switch (hExoskeleton.curMainTask)
         {
         case EXOSKELETON_MAIN_TASK_FREE:
         {
-            if(hUSBCom.ifNewMsgIsThisString("System ID start request"))
-            {
-                hUSBCom.SendText("SystemID start noted");
-                hExoskeleton.curMainTask = EXOSKELETON_MAIN_TASK_SYSTEM_ID;
-                hExoskeleton.curSubTask = EXOSKELETON_SUB_TASK_SYSTEMID_LOG_KNEE_JOINT_DATA;
-                hUSBCom.StartDataLogPassive("SysID Knee.csv");
-                std::cout<<"System ID started! Logging Knee Joint Movement Data"<<std::endl;
-            }
+
         }
             break;
         case EXOSKELETON_MAIN_TASK_SYSTEM_ID:
@@ -104,6 +107,8 @@ int main(int argc, char** argv)
         }
 
         if(ifExit)
+            break;
+        else if(hUSBCom.ifNewMsgIsThisString("STOP"))
             break;
     }
 

@@ -13,6 +13,7 @@ set(SRC
     ${CMAKE_CURRENT_LIST_DIR}/Src/crc32_mpeg.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Src/communication_embedded_system.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Src/exoskeleton.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/Src/lsa.cpp
 )
 
 set(LIBS

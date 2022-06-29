@@ -9,6 +9,7 @@
 #include <fstream>
 #include "exoskeleton.hpp"
 #include "communication_embedded_system.hpp"
+#include "lsa.hpp"
 
 union FloatUInt8
 {
