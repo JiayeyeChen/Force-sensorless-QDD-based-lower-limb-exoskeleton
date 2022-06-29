@@ -150,6 +150,8 @@ void USBCommunicationHandle::StartDataLogPassive(std::string filename)
     curDatalogTask = DATALOG_TASK_START;
     fileStream.open(filename.data());
     fileStream << "Index," << "Time (ms),";
+    fileStream.close();
+    curDatalogFilename = filename;
     ifDatalogStarted = 1;
 }
 
@@ -176,6 +178,7 @@ void USBCommunicationHandle::DataLogManager(void)
         }
         else if (curDatalogTask == DATALOG_TASK_RECEIVE_DATA_SLOT_MSG)
         {
+            fileStream.open(curDatalogFilename.data());
             fileStream << msg.data() << ",";
             dataSlotLabellingCount--;
             std::cout<<"Received dataslot label: " << msg.data() << std::endl;

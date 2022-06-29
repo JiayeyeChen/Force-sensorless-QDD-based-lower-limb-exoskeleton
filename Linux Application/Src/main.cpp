@@ -20,8 +20,11 @@ void USB_RxCargoProcessing(USBCommunicationHandle* husbcom, ExoskeletonHandle* h
             else if (!msg.compare("System ID start request"))
             {
                 husbcom->SendText("SystemID start noted");
+                
                 hexoskeleton->curMainTask = EXOSKELETON_MAIN_TASK_SYSTEM_ID;
-                std::cout<<"System ID started!"<<std::endl;
+                hexoskeleton->curSubTask = EXOSKELETON_SUB_TASK_SYSTEMID_LOG_KNEE_JOINT_DATA;
+                husbcom->StartDataLogPassive("SysID Knee.csv");
+                std::cout<<"System ID started! Logging Knee Joint Movement Data"<<std::endl;
             }
 
 

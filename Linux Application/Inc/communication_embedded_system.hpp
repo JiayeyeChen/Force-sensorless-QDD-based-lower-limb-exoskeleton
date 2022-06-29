@@ -44,6 +44,7 @@ class USBCommunicationHandle
             uint8_t dataSlotLabellingCount;
             uint8_t ifDatalogStarted;
             std::ofstream fileStream;
+            std::string curDatalogFilename;
             /*Received MCU Values*/
             uint32_t    systemTime, index;
     private:
