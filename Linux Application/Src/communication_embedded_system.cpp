@@ -150,67 +150,8 @@ void USBCommunicationHandle::StartDataLogPassive(std::string filename)
     curDatalogTask = DATALOG_TASK_START;
     fileStream.open(filename.data());
     fileStream << "Index," << "Time (ms),";
-    fileStream.close();
     curDatalogFilename = filename;
     ifDatalogStarted = 1;
-}
-
-void USBCommunicationHandle::DataLogManager(void)
-{
-    if (curDatalogTask != DATALOG_TASK_FREE)
-    {
-        std::string msg((const char*)rxMessageCfrm, rxMessageLen);
-        if (curDatalogTask == DATALOG_TASK_START)
-        {
-            SendText("Roger that");
-            curDatalogTask = DATALOG_TASK_RECEIVE_DATA_SLOT_LEN;
-        }
-        else if (curDatalogTask == DATALOG_TASK_RECEIVE_DATA_SLOT_LEN)
-        {
-            if (rxMessageLen <= 2)
-            {
-                dataSlotLen = atoi(msg.data());
-                dataSlotLabellingCount = dataSlotLen;
-                curDatalogTask = DATALOG_TASK_RECEIVE_DATA_SLOT_MSG;
-                SendText("Roger that");
-                std::cout<<"Received Data Slot Length: "<<std::dec<<(unsigned int)dataSlotLen<<std::endl;
-            }
-        }
-        else if (curDatalogTask == DATALOG_TASK_RECEIVE_DATA_SLOT_MSG)
-        {
-
-            fileStream.open(curDatalogFilename.data());
-            fileStream << msg.data() << ",";
-            dataSlotLabellingCount--;
-            std::cout<<"Received dataslot label: " << msg.data() << std::endl;
-            std::cout<<"dataSlotLabellingCount is: "<<std::dec<<(unsigned int)dataSlotLabellingCount<<std::endl;
-            if (dataSlotLabellingCount == 0)
-            {
-                std::this_thread::sleep_for(500ms);
-                SendText("Roger that");
-                fileStream << std::endl;
-                curDatalogTask = DATALOG_TASK_DATALOG;
-            }
-        }
-        else if (curDatalogTask == DATALOG_TASK_DATALOG)
-        {
-            std::cout<<"reached datalog"<<std::endl;
-            memcpy(&index, rxMessageCfrm, 4);
-            memcpy(&systemTime, rxMessageCfrm + 4, 4);
-            fileStream << index << "," << systemTime << ",";
-            for (uint8_t i = 1 ; i <= dataSlotLen; i++)
-            {
-                float data = 0.0f;
-                memcpy(&data, rxMessageCfrm + 4 * (i + 1), 4);
-                fileStream << data << ",";
-                std::cout << "get data: "<< data<<std::endl;
-            }
-            fileStream << std::endl;
-        }
-        else if (curDatalogTask == DATALOG_TASK_END)
-        {
-        }
-    }
 }
 
 bool USBCommunicationHandle::ifNewMsgIsThisString(std::string str)
@@ -227,3 +168,77 @@ bool USBCommunicationHandle::ifNewMsgIsThisString(std::string str)
     }
     return false;
 }
+
+void USBCommunicationHandle::DataLogManager(void)
+{
+    if (curDatalogTask != DATALOG_TASK_FREE)
+    {
+        if(ifNewMessage)
+        {
+            std::string msg((const char*)rxMessageCfrm, rxMessageLen);
+            if (curDatalogTask == DATALOG_TASK_START)
+            {
+                SendText("Roger that");
+                curDatalogTask = DATALOG_TASK_RECEIVE_DATA_SLOT_LEN;
+            }
+            else if (curDatalogTask == DATALOG_TASK_RECEIVE_DATA_SLOT_LEN)
+            {
+                if (rxMessageLen <= 2)
+                {
+                    dataSlotLen = atoi(msg.data());
+                    dataSlotLabellingCount = dataSlotLen;
+                    curDatalogTask = DATALOG_TASK_RECEIVE_DATA_SLOT_MSG;
+                    SendText("Roger that");
+                    std::cout<<"Received Data Slot Length: "<<std::dec<<(unsigned int)dataSlotLen<<std::endl;
+                }
+            }
+            else if (curDatalogTask == DATALOG_TASK_RECEIVE_DATA_SLOT_MSG)
+            {
+                fileStream << msg.data() << ",";
+                dataSlotLabellingCount--;
+                std::cout<<"Received dataslot label: " << msg.data() << std::endl;
+                std::cout<<"dataSlotLabellingCount is: "<<std::dec<<(unsigned int)dataSlotLabellingCount<<std::endl;
+                if (dataSlotLabellingCount == 0)
+                {
+                    std::this_thread::sleep_for(500ms);
+                    SendText("Roger that");
+                    fileStream << std::endl;
+                    curDatalogTask = DATALOG_TASK_DATALOG;
+                }
+            }
+            else if (curDatalogTask == DATALOG_TASK_DATALOG)
+            {
+                if(ifNewMsgIsThisString("Datalog end"))
+                {
+                    SendText("Roger that");
+                    curDatalogTask == DATALOG_TASK_FREE;
+                    fileStream.close();
+                    std::cout<<"Knee Joint Movement Datalog accomplished"<<std::endl;
+                }
+                else
+                {
+                    std::cout<<"reached datalog"<<std::endl;
+                    memcpy(&index, rxMessageCfrm, 4);
+                    memcpy(&systemTime, rxMessageCfrm + 4, 4);
+                    fileStream << index << "," << systemTime << ",";
+                    for (uint8_t i = 1 ; i <= dataSlotLen; i++)
+                    {
+                        float data = 0.0f;
+                        memcpy(&data, rxMessageCfrm + 4 * (i + 1), 4);
+                        fileStream << data << ",";
+                        std::cout << "get data: "<< data<<std::endl;
+                    }
+                    fileStream << std::endl;
+                }
+
+            }
+            else if (curDatalogTask == DATALOG_TASK_END)
+            {
+            }
+
+            ifNewMessage = 0;
+        }
+    }
+}
+
+

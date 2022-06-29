@@ -1,5 +1,7 @@
 #include <main.hpp>
 
+bool ifExit = false;
+
 void USB_RxCargo(USBCommunicationHandle* husbcom)
 {
     while(1)
@@ -10,27 +12,30 @@ void USB_RxCargo(USBCommunicationHandle* husbcom)
 
 void USB_RxCargoProcessing(USBCommunicationHandle* husbcom, ExoskeletonHandle* hexoskeleton, char* filename)
 {
-    while(1)
-    {
-        // if (husbcom->ifNewMessage)
-        // {
-        //     std::string msg((const char*)husbcom->rxMessageCfrm, husbcom->rxMessageLen);
-        //     if (!msg.compare("Datalog start"))
-        //         husbcom->StartDataLogPassive(filename);
-        //     else if (!msg.compare("System ID start request"))
-        //     {
-        //         husbcom->SendText("SystemID start noted");
-        //         hexoskeleton->curMainTask = EXOSKELETON_MAIN_TASK_SYSTEM_ID;
-        //         hexoskeleton->curSubTask = EXOSKELETON_SUB_TASK_SYSTEMID_LOG_KNEE_JOINT_DATA;
-        //         husbcom->StartDataLogPassive("SysID Knee.csv");
-        //         std::cout<<"System ID started! Logging Knee Joint Movement Data"<<std::endl;
-        //     }
+    std::cin.get();
+    ifExit = true;
+    // while(1)
+    // {
+        
+    //     // if (husbcom->ifNewMessage)
+    //     // {
+    //     //     std::string msg((const char*)husbcom->rxMessageCfrm, husbcom->rxMessageLen);
+    //     //     if (!msg.compare("Datalog start"))
+    //     //         husbcom->StartDataLogPassive(filename);
+    //     //     else if (!msg.compare("System ID start request"))
+    //     //     {
+    //     //         husbcom->SendText("SystemID start noted");
+    //     //         hexoskeleton->curMainTask = EXOSKELETON_MAIN_TASK_SYSTEM_ID;
+    //     //         hexoskeleton->curSubTask = EXOSKELETON_SUB_TASK_SYSTEMID_LOG_KNEE_JOINT_DATA;
+    //     //         husbcom->StartDataLogPassive("SysID Knee.csv");
+    //     //         std::cout<<"System ID started! Logging Knee Joint Movement Data"<<std::endl;
+    //     //     }
 
 
-        //     husbcom->DataLogManager();
-        //     husbcom->ifNewMessage = 0;
-        // }
-    }
+    //     //     husbcom->DataLogManager();
+    //     //     husbcom->ifNewMessage = 0;
+    //     // }
+    // }
 
 }
 
@@ -64,17 +69,26 @@ int main(int argc, char** argv)
             {
             case EXOSKELETON_SUB_TASK_SYSTEMID_LOG_KNEE_JOINT_DATA:
             {
-
+                if(hUSBCom.ifNewMsgIsThisString("Datalog start"))
+                {
+                    hUSBCom.StartDataLogPassive("SysID Hip.csv");
+                    std::cout<<"Start Logging Hip Joint Movement Data"<<std::endl;
+                    hExoskeleton.curSubTask = EXOSKELETON_SUB_TASK_SYSTEMID_LOG_HIP_JOINT_DATA;
+                }
             }
                 break;
             case EXOSKELETON_SUB_TASK_SYSTEMID_LOG_HIP_JOINT_DATA:
             {
-
+                if(hUSBCom.ifNewMsgIsThisString("Pls calculate results"))
+                {
+                    hUSBCom.fileStream.close();
+                    hExoskeleton.curSubTask = EXOSKELETON_SUB_TASK_SYSTEMID_LEAST_SQUARE_APPROXIMATION;
+                }
             }
                 break;
             case EXOSKELETON_SUB_TASK_SYSTEMID_LEAST_SQUARE_APPROXIMATION:
             {
-
+                std::cout<<"Lets do LSA now!!"<<std::endl;
             }
                 break;
             default:
@@ -88,5 +102,11 @@ int main(int argc, char** argv)
         default:
             break;
         }
+
+        if(ifExit)
+            break;
     }
+
+    hUSBCom.fileStream.close();
+    return 0;
 }
