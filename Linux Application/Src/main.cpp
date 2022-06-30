@@ -14,29 +14,6 @@ void USB_RxCargoProcessing(USBCommunicationHandle* husbcom, ExoskeletonHandle* h
 {
     std::cin.get();
     ifExit = true;
-    // while(1)
-    // {
-        
-    //     // if (husbcom->ifNewMessage)
-    //     // {
-    //     //     std::string msg((const char*)husbcom->rxMessageCfrm, husbcom->rxMessageLen);
-    //     //     if (!msg.compare("Datalog start"))
-    //     //         husbcom->StartDataLogPassive(filename);
-    //     //     else if (!msg.compare("System ID start request"))
-    //     //     {
-    //     //         husbcom->SendText("SystemID start noted");
-    //     //         hexoskeleton->curMainTask = EXOSKELETON_MAIN_TASK_SYSTEM_ID;
-    //     //         hexoskeleton->curSubTask = EXOSKELETON_SUB_TASK_SYSTEMID_LOG_KNEE_JOINT_DATA;
-    //     //         husbcom->StartDataLogPassive("SysID Knee.csv");
-    //     //         std::cout<<"System ID started! Logging Knee Joint Movement Data"<<std::endl;
-    //     //     }
-
-
-    //     //     husbcom->DataLogManager();
-    //     //     husbcom->ifNewMessage = 0;
-    //     // }
-    // }
-
 }
 
 int main(int argc, char** argv)

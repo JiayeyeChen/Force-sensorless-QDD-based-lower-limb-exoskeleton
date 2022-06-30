@@ -63,6 +63,8 @@
         "typeinfo": "cpp",
         "variant": "cpp",
         "bit": "cpp",
-        "*.ipp": "cpp"
+        "*.ipp": "cpp",
+        "dense": "cpp",
+        "eigenvalues": "cpp"
     }
 }

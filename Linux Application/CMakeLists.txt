@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.0.2)
 project(Lower_Limb_Exoskeleton)
 
 find_package(Boost REQUIRED COMPONENTS system thread regex)
+find_package(Eigen3 3.4.0 REQUIRED NO_MODULE)
 
 include_directories(
     Inc
@@ -22,3 +23,4 @@ set(LIBS
 
 add_executable(exoskeleton ${SRC})
 target_link_libraries(exoskeleton ${LIBS})
+target_link_libraries (exoskeleton Eigen3::Eigen)
