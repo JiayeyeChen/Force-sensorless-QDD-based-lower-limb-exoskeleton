@@ -24,6 +24,7 @@ private:
 
 public:
     uint8_t val;
+    
     enum Exoskeleton_Main_Task curMainTask;
     enum Exoskeleton_Sub_Task curSubTask;
     ExoskeletonHandle(uint8_t test_input);

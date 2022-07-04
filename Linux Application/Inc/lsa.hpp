@@ -18,6 +18,9 @@ class LSAHandle
     void InitAandB(void);
     void KneeJointMovementLSA(std::string filename);
     void HipJointMovementLSA(std::string filename);
+    uint8_t lsaUSBTxBuf[19];
+    void UpdateLSAResultTxBuf(void);
+    
     Eigen::Matrix<float, Eigen::Dynamic, 2>     A {{0,0},{0,0}};
     Eigen::Vector2f                             X {0,0};
     Eigen::VectorXf                             b {0};

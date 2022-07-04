@@ -59,7 +59,7 @@ int main(int argc, char** argv)
                 break;
             case EXOSKELETON_SUB_TASK_SYSTEMID_LOG_HIP_JOINT_DATA:
             {
-                if(hUSBCom.ifNewMsgIsThisString("Pls calculate results"))
+                if(hUSBCom.ifNewMsgIsThisString("Receiving results from PC..."))
                 {
                     hUSBCom.fileStream.close();
                     hExoskeleton.curSubTask = EXOSKELETON_SUB_TASK_SYSTEMID_LEAST_SQUARE_APPROXIMATION;
@@ -70,9 +70,16 @@ int main(int argc, char** argv)
             {
                 hLSA.KneeJointMovementLSA("SysID Knee.csv");
                 hLSA.HipJointMovementLSA("SysID Hip.csv");
-                hExoskeleton.curSubTask = EXOSKELETON_SUB_TASK_NONE;
-                hExoskeleton.curMainTask = EXOSKELETON_MAIN_TASK_FREE;
-                // std::cout<<"Lets do LSA now!!"<<std::endl;
+                hLSA.UpdateLSAResultTxBuf();
+                hUSBCom.TransmitCargo(hLSA.lsaUSBTxBuf, 19);
+                if(hUSBCom.ifNewMsgIsThisString("System ID end"))
+                {
+                    hUSBCom.SendText("Roger that");
+                    hExoskeleton.curSubTask = EXOSKELETON_SUB_TASK_NONE;
+                    hExoskeleton.curMainTask = EXOSKELETON_MAIN_TASK_FREE;
+                }
+                
+                //std::cout<<"Lets do LSA now!!"<<std::endl;
             }
                 break;
             default:

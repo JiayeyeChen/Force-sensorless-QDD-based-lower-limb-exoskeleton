@@ -217,7 +217,7 @@ void USBCommunicationHandle::DataLogManager(void)
                 }
                 else
                 {
-                    std::cout<<"reached datalog"<<std::endl;
+//                    std::cout<<"reached datalog"<<std::endl;
                     memcpy(&index, rxMessageCfrm, 4);
                     memcpy(&systemTime, rxMessageCfrm + 4, 4);
                     fileStream << index << "," << systemTime << ",";
@@ -226,7 +226,7 @@ void USBCommunicationHandle::DataLogManager(void)
                         float data = 0.0f;
                         memcpy(&data, rxMessageCfrm + 4 * (i + 1), 4);
                         fileStream << data << ",";
-                        std::cout << "get data: "<< data<<std::endl;
+//                        std::cout << "get data: "<< data<<std::endl;
                     }
                     fileStream << std::endl;
                 }

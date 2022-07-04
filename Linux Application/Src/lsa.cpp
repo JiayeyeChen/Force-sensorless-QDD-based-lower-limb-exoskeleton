@@ -23,8 +23,8 @@ void LSAHandle::KneeJointMovementLSA(std::string filename)
     {
         std::string line;
         getline(kneeFile, line);
-        std::cout<<"New line: " << line<<std::endl;
-        std::cout<<"Line length: "<<line.length()<<std::endl;
+//        std::cout<<"New line: " << line<<std::endl;
+//        std::cout<<"Line length: "<<line.length()<<std::endl;
         if (!line.length())
         {
             Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic> inverse;
@@ -90,8 +90,8 @@ void LSAHandle::HipJointMovementLSA(std::string filename)
     {
         std::string line;
         getline(hipFile, line);
-        std::cout<<"New line: " << line<<std::endl;
-        std::cout<<"Line length: "<<line.length()<<std::endl;
+//        std::cout<<"New line: " << line<<std::endl;
+//        std::cout<<"Line length: "<<line.length()<<std::endl;
         if (!line.length())
         {
             Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic> inverse;
@@ -148,4 +148,28 @@ void LSAHandle::HipJointMovementLSA(std::string filename)
         }
         dataIndex++;
     }
+}
+
+void LSAHandle::UpdateLSAResultTxBuf(void)
+{
+      uint8_t ptr = 0;
+      lsaUSBTxBuf[ptr++] = 'L';
+      lsaUSBTxBuf[ptr++] = 'S';
+      lsaUSBTxBuf[ptr++] = 'A';
+      lsaUSBTxBuf[ptr++] = output_a1.b8[0];
+      lsaUSBTxBuf[ptr++] = output_a1.b8[1];
+      lsaUSBTxBuf[ptr++] = output_a1.b8[2];
+      lsaUSBTxBuf[ptr++] = output_a1.b8[3];
+      lsaUSBTxBuf[ptr++] = output_m1.b8[0];
+      lsaUSBTxBuf[ptr++] = output_m1.b8[1];
+      lsaUSBTxBuf[ptr++] = output_m1.b8[2];
+      lsaUSBTxBuf[ptr++] = output_m1.b8[3];
+      lsaUSBTxBuf[ptr++] = output_a2.b8[0];
+      lsaUSBTxBuf[ptr++] = output_a2.b8[1];
+      lsaUSBTxBuf[ptr++] = output_a2.b8[2];
+      lsaUSBTxBuf[ptr++] = output_a2.b8[3];
+      lsaUSBTxBuf[ptr++] = output_m2.b8[0];
+      lsaUSBTxBuf[ptr++] = output_m2.b8[1];
+      lsaUSBTxBuf[ptr++] = output_m2.b8[2];
+      lsaUSBTxBuf[ptr++] = output_m2.b8[3];
 }
