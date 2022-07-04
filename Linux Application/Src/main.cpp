@@ -10,19 +10,19 @@ void USB_RxCargo(USBCommunicationHandle* husbcom)
     }
 }
 
-void USB_RxCargoProcessing(USBCommunicationHandle* husbcom, ExoskeletonHandle* hexoskeleton, char* filename)
+void Keyboard(void)
 {
     std::cin.get();
     ifExit = true;
 }
-
+//argv[1]: USB device address. argv[2]: Datalog filename. argv[3]: L1 length in mm
 int main(int argc, char** argv)
 {
+    LSAHandle hLSA(atof(argv[3]));
     USBCommunicationHandle hUSBCom(argv[1], 921600);
     ExoskeletonHandle hExoskeleton(10);
     std::thread Thread_USB_RxCargo(USB_RxCargo, &hUSBCom);
-    std::thread THread_USB_RxCargoProcessing(USB_RxCargoProcessing, &hUSBCom, &hExoskeleton, argv[2]);
-
+    std::thread Thread_KeyboardInput(Keyboard);
     while(1)
     {
         hUSBCom.DataLogManager();
@@ -68,7 +68,9 @@ int main(int argc, char** argv)
                 break;
             case EXOSKELETON_SUB_TASK_SYSTEMID_LEAST_SQUARE_APPROXIMATION:
             {
-                std::cout<<"Lets do LSA now!!"<<std::endl;
+                hLSA.KneeJointMovementLSA("SysID Knee.csv");
+                hLSA.HipJointMovementLSA("SysID Hip.csv");
+                // std::cout<<"Lets do LSA now!!"<<std::endl;
             }
                 break;
             default:

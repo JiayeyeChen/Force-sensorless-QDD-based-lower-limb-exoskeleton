@@ -11,11 +11,4 @@
 #include "communication_embedded_system.hpp"
 #include "lsa.hpp"
 
-union FloatUInt8
-{
-    float   f;
-    uint8_t b8[4];
-};
-
-
 #endif

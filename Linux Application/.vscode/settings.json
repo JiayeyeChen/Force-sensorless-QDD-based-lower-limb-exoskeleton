@@ -65,6 +65,10 @@
         "bit": "cpp",
         "*.ipp": "cpp",
         "dense": "cpp",
-        "eigenvalues": "cpp"
+        "eigenvalues": "cpp",
+        "strstream": "cpp",
+        "unordered_set": "cpp",
+        "cfenv": "cpp",
+        "valarray": "cpp"
     }
 }
