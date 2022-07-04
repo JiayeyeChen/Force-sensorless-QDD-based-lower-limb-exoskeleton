@@ -70,6 +70,8 @@ int main(int argc, char** argv)
             {
                 hLSA.KneeJointMovementLSA("SysID Knee.csv");
                 hLSA.HipJointMovementLSA("SysID Hip.csv");
+                hExoskeleton.curSubTask = EXOSKELETON_SUB_TASK_NONE;
+                hExoskeleton.curMainTask = EXOSKELETON_MAIN_TASK_FREE;
                 // std::cout<<"Lets do LSA now!!"<<std::endl;
             }
                 break;
