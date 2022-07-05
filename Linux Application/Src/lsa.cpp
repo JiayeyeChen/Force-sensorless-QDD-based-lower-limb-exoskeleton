@@ -34,7 +34,7 @@ void LSAHandle::KneeJointMovementLSA(std::string filename)
             output_a2.f = X[0]/X[1];
             output_m2.f = X[1]/output_a2.f;
             std::cout<<"Knee LSA finished. Size of data rows: "<< matrixRowIndex << std::endl;
-            std::cout<<"a2 = " << output_a2.f << " mm"<<std::endl;
+            std::cout<<"a2 = " << output_a2.f << " m"<<std::endl;
             std::cout<<"m2 = " << output_m2.f<< " kg" <<std::endl;
             kneeFile.close();
             break;
@@ -101,7 +101,7 @@ void LSAHandle::HipJointMovementLSA(std::string filename)
             output_a1.f = X[0]/X[1];
             output_m1.f = X[1]/output_a1.f;
             std::cout<<"Hip LSA finished. Size of data rows: "<< matrixRowIndex << std::endl;
-            std::cout<<"a1 = " << output_a1.f << " mm"<<std::endl;
+            std::cout<<"a1 = " << output_a1.f << " m"<<std::endl;
             std::cout<<"m1 = " << output_m1.f<< " kg" <<std::endl;
             hipFile.close();
             break;
@@ -143,7 +143,7 @@ void LSAHandle::HipJointMovementLSA(std::string filename)
             b(matrixRowIndex) = torque1 + GRAVITY_ACCELERATION * output_m2.f * output_a2.f * sin(theta0+theta1+theta2) + \
                                 GRAVITY_ACCELERATION * output_m2.f * L1Length * sin(theta0+theta1) + theta2Vel*(2*theta1Vel+theta2Vel)*output_m2.f*L1Length*output_a2.f*sin(theta2) - \
                                 output_m2.f*output_a2.f*L1Length*theta2Acc*cos(theta2) - output_m2.f*powf32(output_a2.f,2)*theta2Acc - 2*output_m2.f*L1Length*output_a2.f*theta1Acc*cos(theta2) - \
-                                output_m2.f*powf32(output_a2.f, 2) - output_m2.f*powf32(L1Length, 2)*theta1Acc;
+                                output_m2.f*powf32(output_a2.f, 2)*theta1Acc - output_m2.f*powf32(L1Length, 2)*theta1Acc;
             matrixRowIndex++;
         }
         dataIndex++;
