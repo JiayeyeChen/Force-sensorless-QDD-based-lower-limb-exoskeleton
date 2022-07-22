@@ -15,7 +15,7 @@ void Keyboard(void)
     std::cin.get();
     ifExit = true;
 }
-//argv[1]: USB device address. argv[2]: Datalog filename. argv[3]: L1 length in mm
+//argv[1]: USB device address. argv[2]: Datalog filename. argv[3]: L1 length in m
 int main(int argc, char** argv)
 {
     LSAHandle hLSA(atof(argv[3]));
