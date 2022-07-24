@@ -63,15 +63,21 @@ int main(int argc, char** argv)
                 {
                     hUSBCom.fileStream.close();
                     hExoskeleton.curSubTask = EXOSKELETON_SUB_TASK_SYSTEMID_LEAST_SQUARE_APPROXIMATION;
+                    hLSA.ifLSACalculationFinished = 0;
                 }
             }
                 break;
             case EXOSKELETON_SUB_TASK_SYSTEMID_LEAST_SQUARE_APPROXIMATION:
             {
-                hLSA.KneeJointMovementLSA("SysID Knee.csv");
-                hLSA.HipJointMovementLSA("SysID Hip.csv");
-                hLSA.UpdateLSAResultTxBuf();
-                hUSBCom.TransmitCargo(hLSA.lsaUSBTxBuf, 19);
+                if (!hLSA.ifLSACalculationFinished)
+                {
+                    hLSA.KneeJointMovementLSA("SysID Knee.csv");
+                    hLSA.HipJointMovementLSA("SysID Hip.csv");
+                    hLSA.UpdateLSAResultTxBuf();
+                }
+                else
+                    hUSBCom.TransmitCargo(hLSA.lsaUSBTxBuf, 23);
+                
                 if(hUSBCom.ifNewMsgIsThisString("System ID end"))
                 {
                     hUSBCom.SendText("Roger that");

@@ -1,6 +1,6 @@
 #include "lsa.hpp"
 
-LSAHandle::LSAHandle(float l1_input)
+LSAHandle::LSAHandle(float l1_input):ifLSACalculationFinished(0)
 {
     L1Length = l1_input;
 }
@@ -145,7 +145,10 @@ void LSAHandle::HipJointMovementLSA(std::string filename)
             A_hip(matrixRowIndex, 0) = theta1Acc;
             A_hip(matrixRowIndex, 1) = -GRAVITY_ACCELERATION * sin(theta0 + theta1);
             A_hip(matrixRowIndex, 2) = powf32(L1Length, 2.0f) * theta1Acc - GRAVITY_ACCELERATION * L1Length * sin(theta0 + theta1);
-            b(matrixRowIndex) = 
+            b(matrixRowIndex) = torque1 + output_X2.f * (L1Length * theta2Vel * (2.0f * theta1Vel + theta2Vel) * sin(theta2) \
+                                                         - L1Length * theta2Acc * cos(theta2) \
+                                                         - 2.0f * L1Length * theta1Acc * cos(theta2) + GRAVITY_ACCELERATION * sin(theta0 + theta1 + theta2)) \
+                                                         - output_J2.f * (theta1Acc + theta2Acc);
             matrixRowIndex++;
         }
         dataIndex++;
@@ -158,18 +161,22 @@ void LSAHandle::UpdateLSAResultTxBuf(void)
       lsaUSBTxBuf[ptr++] = 'L';
       lsaUSBTxBuf[ptr++] = 'S';
       lsaUSBTxBuf[ptr++] = 'A';
-      lsaUSBTxBuf[ptr++] = output_a1.b8[0];
-      lsaUSBTxBuf[ptr++] = output_a1.b8[1];
-      lsaUSBTxBuf[ptr++] = output_a1.b8[2];
-      lsaUSBTxBuf[ptr++] = output_a1.b8[3];
-      lsaUSBTxBuf[ptr++] = output_m1.b8[0];
-      lsaUSBTxBuf[ptr++] = output_m1.b8[1];
-      lsaUSBTxBuf[ptr++] = output_m1.b8[2];
-      lsaUSBTxBuf[ptr++] = output_m1.b8[3];
-      lsaUSBTxBuf[ptr++] = output_a2.b8[0];
-      lsaUSBTxBuf[ptr++] = output_a2.b8[1];
-      lsaUSBTxBuf[ptr++] = output_a2.b8[2];
-      lsaUSBTxBuf[ptr++] = output_a2.b8[3];
+      lsaUSBTxBuf[ptr++] = output_J1.b8[0];
+      lsaUSBTxBuf[ptr++] = output_J1.b8[1];
+      lsaUSBTxBuf[ptr++] = output_J1.b8[2];
+      lsaUSBTxBuf[ptr++] = output_J1.b8[3];
+      lsaUSBTxBuf[ptr++] = output_X1.b8[0];
+      lsaUSBTxBuf[ptr++] = output_X1.b8[1];
+      lsaUSBTxBuf[ptr++] = output_X1.b8[2];
+      lsaUSBTxBuf[ptr++] = output_X1.b8[3];
+      lsaUSBTxBuf[ptr++] = output_J2.b8[0];
+      lsaUSBTxBuf[ptr++] = output_J2.b8[1];
+      lsaUSBTxBuf[ptr++] = output_J2.b8[2];
+      lsaUSBTxBuf[ptr++] = output_J2.b8[3];
+      lsaUSBTxBuf[ptr++] = output_X2.b8[0];
+      lsaUSBTxBuf[ptr++] = output_X2.b8[1];
+      lsaUSBTxBuf[ptr++] = output_X2.b8[2];
+      lsaUSBTxBuf[ptr++] = output_X2.b8[3];
       lsaUSBTxBuf[ptr++] = output_m2.b8[0];
       lsaUSBTxBuf[ptr++] = output_m2.b8[1];
       lsaUSBTxBuf[ptr++] = output_m2.b8[2];
