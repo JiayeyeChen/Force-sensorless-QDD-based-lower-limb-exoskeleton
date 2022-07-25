@@ -26,7 +26,8 @@ class LSAHandle
     Eigen::Matrix<float, Eigen::Dynamic, 3>     A_hip;// {{0,0},{0,0},{0,0}};
     Eigen::Vector2f                             X_knee {0,0};
     Eigen::Vector3f                             X_hip {0,0,0};
-    Eigen::VectorXf                             b {0};
+    Eigen::VectorXf                             b_knee {0};
+    Eigen::VectorXf                             b_hip {0};
     float                                       L1Length;
     FloatUInt8                                  output_J2;
     FloatUInt8                                  output_X2;

@@ -11,8 +11,10 @@ void LSAHandle::InitAandB(void)
     A_knee << 0, 0;
     A_hip.conservativeResize(1, 3);
     A_hip << 0, 0, 0;
-    b.conservativeResize(1, 1);
-    b << 0;
+    b_hip.conservativeResize(1, 1);
+    b_knee.conservativeResize(1, 1);
+    b_hip << 0;
+    b_knee << 0;
 }
 
 void LSAHandle::KneeJointMovementLSA(std::string filename)
@@ -32,7 +34,7 @@ void LSAHandle::KneeJointMovementLSA(std::string filename)
             Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic> inverse;
             inverse = A_knee.transpose()*A_knee;
             inverse = inverse.inverse();
-            X_knee = inverse * A_knee.transpose() * b;
+            X_knee = inverse * A_knee.transpose() * b_knee;
             output_J2.f = X_knee[0];
             output_X2.f = X_knee[1];
             std::cout<<"Knee LSA finished. Size of data rows: "<< matrixRowIndex << std::endl;
@@ -71,11 +73,11 @@ void LSAHandle::KneeJointMovementLSA(std::string filename)
             torque2 = atof(tempStr.c_str());
 
             A_knee.conservativeResize(matrixRowIndex + 1, 2);
-            b.conservativeResize(matrixRowIndex + 1);
+            b_knee.conservativeResize(matrixRowIndex + 1);
 
             A_knee(matrixRowIndex, 0) = theta1Acc + theta2Acc;
             A_knee(matrixRowIndex, 1) = L1Length * theta1Acc * cos(theta2) + L1Length * powf32(theta1Vel, 2.0f) * sin(theta2) -GRAVITY_ACCELERATION * sin(theta0 + theta1 + theta2);
-            b(matrixRowIndex) = torque2;
+            b_knee(matrixRowIndex) = torque2;
             matrixRowIndex++;
         }
         dataIndex++;
@@ -99,7 +101,7 @@ void LSAHandle::HipJointMovementLSA(std::string filename)
             Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic> inverse;
             inverse = A_hip.transpose()*A_hip;
             inverse = inverse.inverse();
-            X_hip = inverse * A_hip.transpose() * b;
+            X_hip = inverse * A_hip.transpose() * b_hip;
             output_J1.f = X_hip[0];
             output_X1.f = X_hip[1];
             output_m2.f = X_hip[2];
@@ -140,12 +142,12 @@ void LSAHandle::HipJointMovementLSA(std::string filename)
             torque2 = atof(tempStr.c_str());
 
             A_hip.conservativeResize(matrixRowIndex + 1, 3);
-            b.conservativeResize(matrixRowIndex + 1);
+            b_hip.conservativeResize(matrixRowIndex + 1);
 
             A_hip(matrixRowIndex, 0) = theta1Acc;
             A_hip(matrixRowIndex, 1) = -GRAVITY_ACCELERATION * sin(theta0 + theta1);
             A_hip(matrixRowIndex, 2) = powf32(L1Length, 2.0f) * theta1Acc - GRAVITY_ACCELERATION * L1Length * sin(theta0 + theta1);
-            b(matrixRowIndex) = torque1 + output_X2.f * (L1Length * theta2Vel * (2.0f * theta1Vel + theta2Vel) * sin(theta2) \
+            b_hip(matrixRowIndex) = torque1 + output_X2.f * (L1Length * theta2Vel * (2.0f * theta1Vel + theta2Vel) * sin(theta2) \
                                                          - L1Length * theta2Acc * cos(theta2) \
                                                          - 2.0f * L1Length * theta1Acc * cos(theta2) + GRAVITY_ACCELERATION * sin(theta0 + theta1 + theta2)) \
                                                          - output_J2.f * (theta1Acc + theta2Acc);
