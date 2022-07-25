@@ -22,10 +22,10 @@ class LSAHandle
     uint8_t ifLSACalculationFinished;
     void UpdateLSAResultTxBuf(void);
     
-    Eigen::Matrix<float, Eigen::Dynamic, 2>     A_knee {{0,0},{0,0}};
-    Eigen::Matrix<float, Eigen::Dynamic, 3>     A_hip {{0,0},{0,0}, {0,0}};
+    Eigen::Matrix<float, Eigen::Dynamic, 2>     A_knee;// {{0,0},{0,0}};
+    Eigen::Matrix<float, Eigen::Dynamic, 3>     A_hip;// {{0,0},{0,0},{0,0}};
     Eigen::Vector2f                             X_knee {0,0};
-    Eigen::Vector3f                             X_hip {0,0};
+    Eigen::Vector3f                             X_hip {0,0,0};
     Eigen::VectorXf                             b {0};
     float                                       L1Length;
     FloatUInt8                                  output_J2;
