@@ -74,6 +74,7 @@ int main(int argc, char** argv)
                     hLSA.KneeJointMovementLSA("SysID Knee.csv");
                     hLSA.HipJointMovementLSA("SysID Hip.csv");
                     hLSA.UpdateLSAResultTxBuf();
+                    hLSA.ifLSACalculationFinished = 1;
                 }
                 else
                     hUSBCom.TransmitCargo(hLSA.lsaUSBTxBuf, 23);
@@ -103,7 +104,10 @@ int main(int argc, char** argv)
         if(ifExit)
             break;
         else if(hUSBCom.ifNewMsgIsThisString("STOP"))
-            break;
+        {
+            
+            hExoskeleton.curMainTask = EXOSKELETON_MAIN_TASK_FREE;
+        }
     }
 
     hUSBCom.fileStream.close();
