@@ -147,10 +147,12 @@ void LSAHandle::HipJointMovementLSA(std::string filename)
             A_hip(matrixRowIndex, 0) = theta1Acc;
             A_hip(matrixRowIndex, 1) = -GRAVITY_ACCELERATION * sin(theta0 + theta1);
             A_hip(matrixRowIndex, 2) = powf32(L1Length, 2.0f) * theta1Acc - GRAVITY_ACCELERATION * L1Length * sin(theta0 + theta1);
-            b_hip(matrixRowIndex) = torque1 + output_X2.f * (L1Length * theta2Vel * (2.0f * theta1Vel + theta2Vel) * sin(theta2) \
-                                                         - L1Length * theta2Acc * cos(theta2) \
-                                                         - 2.0f * L1Length * theta1Acc * cos(theta2) + GRAVITY_ACCELERATION * sin(theta0 + theta1 + theta2)) \
-                                                         - output_J2.f * (theta1Acc + theta2Acc);
+            b_hip(matrixRowIndex) = torque1 - torque2 + output_X2.f * (L1Length * theta2Vel * (2.0f * theta1 + theta2) * sin(theta2) - L1Length * (theta1Acc + theta2Acc) * cos(theta2) \
+                                                                       + L1Length * powf32(theta1Vel, 2.0f) * sin(theta2));
+            // b_hip(matrixRowIndex) = torque1 + output_X2.f * (L1Length * theta2Vel * (2.0f * theta1Vel + theta2Vel) * sin(theta2) \
+            //                                              - L1Length * theta2Acc * cos(theta2) \
+            //                                              - 2.0f * L1Length * theta1Acc * cos(theta2) + GRAVITY_ACCELERATION * sin(theta0 + theta1 + theta2)) \
+            //                                              - output_J2.f * (theta1Acc + theta2Acc);
             matrixRowIndex++;
         }
         dataIndex++;
