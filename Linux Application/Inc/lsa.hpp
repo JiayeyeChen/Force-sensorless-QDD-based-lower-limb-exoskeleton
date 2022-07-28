@@ -25,7 +25,7 @@ class LSAHandle
     Eigen::Matrix<float, Eigen::Dynamic, 2>     A_knee;
     Eigen::Matrix<float, Eigen::Dynamic, 2>     A_hip;
     Eigen::Vector2f                             X_knee {0,0};
-    Eigen::Vector3f                             X_hip {0,0,0};
+    Eigen::Vector2f                             X_hip {0,0};
     Eigen::VectorXf                             b_knee {0};
     Eigen::VectorXf                             b_hip {0};
     float                                       L1Length;
