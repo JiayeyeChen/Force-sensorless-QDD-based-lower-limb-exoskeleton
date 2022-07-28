@@ -18,12 +18,12 @@ class LSAHandle
     void InitAandB(void);
     void KneeJointMovementLSA(std::string filename);
     void HipJointMovementLSA(std::string filename);
-    uint8_t lsaUSBTxBuf[23];
+    uint8_t lsaUSBTxBuf[19];
     uint8_t ifLSACalculationFinished;
     void UpdateLSAResultTxBuf(void);
     
-    Eigen::Matrix<float, Eigen::Dynamic, 2>     A_knee;// {{0,0},{0,0}};
-    Eigen::Matrix<float, Eigen::Dynamic, 3>     A_hip;// {{0,0},{0,0},{0,0}};
+    Eigen::Matrix<float, Eigen::Dynamic, 2>     A_knee;
+    Eigen::Matrix<float, Eigen::Dynamic, 2>     A_hip;
     Eigen::Vector2f                             X_knee {0,0};
     Eigen::Vector3f                             X_hip {0,0,0};
     Eigen::VectorXf                             b_knee {0};
@@ -33,7 +33,6 @@ class LSAHandle
     FloatUInt8                                  output_X2;
     FloatUInt8                                  output_J1;
     FloatUInt8                                  output_X1;
-    FloatUInt8                                  output_m2;
     private:
 
 };
