@@ -1,0 +1,13 @@
+[Unit]
+Description=lower_limb_exoskeleton_agent
+[Service]
+Type=forking
+Restart=always
+ExecStart=/home/jy/git/exoskeleton.sh
+ExitType=cgroup
+timeoutSec=900
+TimeoutAbortSec=infinity
+RemainAfterExit=1
+
+[Install]
+WantedBy=multi-user.target
