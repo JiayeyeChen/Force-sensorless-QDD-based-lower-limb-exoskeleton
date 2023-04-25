@@ -5,8 +5,10 @@ Type=forking
 Restart=always
 ExecStart=/home/jy/git/exoskeleton.sh
 ExitType=cgroup
-timeoutSec=900
+timeoutSec=infinity
 TimeoutAbortSec=infinity
+TimeoutStartSec=infinity
+TimeoutStopSec=infinity
 RemainAfterExit=1
 
 [Install]
